@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "php-cs-fixer.executablePath": "php-cs-fixer",
+    "php-cs-fixer.onsave": true,
+    "php-cs-fixer.config": "/.php-cs-fixer.php;"
+}
