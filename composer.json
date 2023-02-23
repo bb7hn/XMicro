@@ -1,0 +1,25 @@
+{
+  "name": "batuhanozen/x-micro",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "autoload": {
+    "files": [
+      "./XMicro.php"
+    ],
+    "psr-4": {
+      "XMicro\\MicroService\\": "./",
+      "XMicro\\MySql\\": "./"
+    }
+  },
+
+  "authors": [
+    {
+      "name": "batuhanozen",
+      "email": "iletisim@batuhanozen.com"
+    }
+  ],
+  "require": {
+    "ext-pdo": "*"
+  }
+}
