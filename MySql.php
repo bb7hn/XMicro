@@ -74,6 +74,8 @@
             if ($this->debugger) {
                 echo '<h4>SELECT</h4>';
                 echo '<pre><code class="language-sql">' . $sql . '</code></pre>';
+                echo '<h4 style="margin-left: 12px; color: forestgreen">values</h4>';
+                echo '<pre style="margin-left: 12px"><code class="language-js">' . json_encode([$id]) . '</code></pre>';
                 return;
             }
             $stmt = $this->db->prepare($sql);

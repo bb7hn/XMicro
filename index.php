@@ -2,7 +2,7 @@
 
     use XMicro\MicroService;
 
-    require_once 'auto_loader.php';
+    require_once 'autoload.php';
     // INIT CLASS
     // NOTE THAT: IF DEBUGGER ENABLED YOU'LL SEE ONLY QUERIES. NONE OF THEM WILL RUN
     $service = new MicroService(true);
@@ -18,7 +18,6 @@
         'updated_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
         'deleted_at' => 'TIMESTAMP NULL DEFAULT NULL',
     ];
-
     $db->create('test', $structure);
 
     // INSERT EXAMPLE
@@ -30,14 +29,19 @@
 
     // SELECT EXAMPLE
     $db->select("test", 1);
+
     // SELECT ALL EXAMPLE
     $db->selectAll("test");
+
     // SELECT ALL EXAMPLE WITH CONDITIONS
     $conditions = ['name' => 'John', 'age' => 30];
     $db->selectAll("test", $conditions);
+
     // UPDATE EXAMPLE
     $db->update('test', 1, ['age' => 31]);
+
     // DELETE ALL EXAMPLE
-    $db->delete('test', []);
+    $db->delete('test');
+
     // DELETE CONDITIONAL EXAMPLE
     $db->delete('test', ["id" => 1]);

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XMicro</title>
+    <style>
+        html {
+            background: rgba(0, 0, 0, .88);
+            color: #FFF;
+        }
+
+        body {
+            height: 100vh;
+            max-width: 100vw;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            padding: 0;
+            margin: 12px 0 0;
+        }
+
+        hr {
+            border: whitesmoke 1px solid;
+            padding: 0;
+            margin: 6px 0;
+        }
+
+        pre {
+            margin: 0 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css"
+          integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+</head>
+<body>
+<h1 style="border-bottom: 1px solid whitesmoke; padding-bottom: 4px; margin-right: auto">XMicro PHP Class</h1>
+
+<h2 style="margin-top: 24px">Installation</h2>
+<pre>
+    <code class="language-bash">
+    mkdir my-project
+    cd my-project
+    composer require batuhanozen/x-micro --prefer-dist dev-main
+    </code>
+</pre>
+<hr/>
+
+<h2>Getting Started</h2>
+<pre>
+    <code class="language-php">
+    use XMicro\MicroService;
+    require_once 'vendor/autoload.php';
+    // INIT CLASS
+    // NOTE THAT: IF DEBUGGER ENABLED YOU'LL SEE ONLY QUERIES. NONE OF THEM WILL RUN
+    $service = new MicroService(true);
+    $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
+    </code>
+</pre>
+<hr/>
+
+<h2>Create</h2>
+<pre>
+    <code class="language-php">
+    use XMicro\MicroService;
+    require_once 'vendor/autoload.php';
+    // INIT CLASS
+    // NOTE THAT: IF DEBUGGER ENABLED YOU'LL SEE ONLY QUERIES. NONE OF THEM WILL RUN
+    $service = new MicroService(true);
+    $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    CREATE TABLE IF NOT EXISTS test(
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    age INT(11) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL)
+    </code>
+</pre>
+<hr/>
+
+<h2>INSERT</h2>
+<pre>
+    <code class="language-php">
+    // INSERT EXAMPLE
+    $data = [
+        "first_name" => "John",
+        "last_name" => "Doe"
+    ];
+    $db->insert('test', $data);
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    INSERT INTO test (first_name, last_name, created_at) VALUES (?,?,NOW())
+    </code>
+    <h4 style="margin-left: 12px;margin-top:0px;color: forestgreen;">values</h4>
+    <code style="margin-left: 12px;margin-top:0px;" class="language-js">
+    {"first_name":"John","last_name":"Doe"}
+    </code>
+</pre>
+
+<hr/>
+<h2>Select</h2>
+<pre>
+    <code class="language-php">
+    // SELECT EXAMPLE
+    $db->select("test", 1);
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    SELECT * FROM test WHERE id = ?
+    </code>
+    <h4 style="margin-left: 12px;margin-top:0px;color: forestgreen;">values</h4>
+    <code style="margin-left: 12px;margin-top:0px;" class="language-js">
+    [1]
+    </code>
+</pre>
+
+<hr/>
+
+<h2>Select All</h2>
+<pre>
+    <code class="language-php">
+    // SELECT ALL EXAMPLE
+    $db->selectAll("test");
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    SELECT * FROM test
+    </code>
+</pre>
+
+<hr/>
+
+<h2>Select All (Conditional)</h2>
+<pre>
+    <code class="language-php">
+    // SELECT ALL EXAMPLE WITH CONDITIONS
+    $conditions = ['name' => 'John', 'age' => 30];
+    $db->selectAll("test", $conditions);
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    SELECT * FROM test WHERE name = ? AND age = ?
+    </code>
+    <h4 style="margin-left: 12px;color: forestgreen;">values</h4>
+    <code style="margin-left: 12px;" class="language-js">
+    {"name":"John","age":30}
+    </code>
+</pre>
+
+<hr/>
+
+<h2>Update</h2>
+<pre>
+    <code class="language-php">
+    // UPDATE EXAMPLE
+    $db->update('test', 1, ['age' => 31]);
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    UPDATE test SET age=? WHERE id = ? AND updated_at = NOW()
+    </code>
+    <h4 style="margin-left: 12px;color: forestgreen;">values</h4>
+    <code style="margin-left: 12px;" class="language-js">
+    {"age":31}
+    </code>
+</pre>
+
+<h2>Delete</h2>
+<pre>
+    <code class="language-php">
+    // DELETE CONDITIONAL EXAMPLE
+    $db->delete('test', ["id" => 1]);
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    UPDATE test SET deleted_at = NOW()
+    </code>
+</pre>
+
+<h2>Delete All</h2>
+<pre>
+    <code class="language-php">
+    // DELETE ALL EXAMPLE
+    //$db->delete('test', []); // the line below is same with this line
+    $db->delete('test');
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    UPDATE test SET deleted_at = NOW() WHERE id = ?
+    </code>
+    <h4 style="margin-left: 12px;color: forestgreen;">values</h4>
+    <code style="margin-left: 12px;" class="language-js">
+    {"id":1}
+    </code>
+</pre>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
