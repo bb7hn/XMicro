@@ -2,81 +2,42 @@
 
     use XMicro\MicroService;
 
-    require_once 'MicroService.php';
+    require_once 'auto_loader.php';
+    // INIT CLASS
+    // NOTE THAT: IF DEBUGGER ENABLED YOU'LL SEE ONLY QUERIES. NONE OF THEM WILL RUN
+    $service = new MicroService(true);
+    $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
 
-    $Service = new MicroService(true);
-
-    //$Service->response();
-
-    $DB = $Service->conn_mysql('localhost', 'x-micro', 'root', '');
-
-    $DB->select('test', '*');
-
-
-    $cols = [
-        'id' => 'int(11) NOT NULL AUTO_INCREMENT',
-        'name' => 'varchar(255)',
-        'last_name' => 'varchar(255)'
+    // CREATE EXAMPLE
+    $structure = [
+        'id' => 'INT(11) AUTO_INCREMENT PRIMARY KEY',
+        'first_name' => 'VARCHAR(255)',
+        'last_name' => 'VARCHAR(255)',
+        'age' => 'INT(11) NOT NULL',
+        'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'updated_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'deleted_at' => 'TIMESTAMP NULL DEFAULT NULL',
     ];
 
-    //$DB->create('test', $cols);
+    $db->create('test', $structure);
 
-    //$DB->drop('test');
-
-    //$DB->create('test', $cols);
-
-    /*$values = [
-        "name" => "a",
-        "last_name" => "b"
+    // INSERT EXAMPLE
+    $data = [
+        "first_name" => "John",
+        "last_name" => "Doe"
     ];
+    $db->insert('test', $data);
 
-    $DB->insert('test', $values);
-
-    $values["name"]="c";
-    $values["last_name"]="d";
-
-    $DB->insert('test', $values);
-
-    $conditions = [
-        "id"=>1,
-    ];*/
-
-    /*$DB->delete('test');*/
-
-    /*$where = [
-        "id" => 1,
-        "deleted_at" => !0
-    ];
-
-    $results = $DB->find('test');
-
-    echo'<pre>';
-    var_dump($results);
-    echo'</pre>';
-
-    $results = $DB->find('test','*',$where);
-
-    echo'<pre>';
-    var_dump($results);
-    echo'</pre>';
-
-    $results = $DB->first('test');
-
-    echo'<pre>';
-    var_dump($results);
-    echo'</pre>';
-
-    $results = $DB->first('test',);
-
-    echo'<pre>';
-    var_dump($results);
-    echo'</pre>';
-
-    $results = $DB->last('test');
-
-    echo'<pre>';
-    var_dump($results);
-    echo'</pre>';*/
-
-    //$Service->response(['message'=>'ok','data'=>$results]);
-    //$Service->response(['message'=>'ok','data'=>$results]);
+    // SELECT EXAMPLE
+    $db->select("test", 1);
+    // SELECT ALL EXAMPLE
+    $db->selectAll("test");
+    // SELECT ALL EXAMPLE WITH CONDITIONS
+    $conditions = ['name' => 'John', 'age' => 30];
+    $db->selectAll("test", $conditions);
+    // UPDATE EXAMPLE
+    $db->update('test', 1, ['age' => 31]);
+    // DELETE ALL EXAMPLE
+    $db->delete('test', []);
+    // DELETE CONDITIONAL EXAMPLE
+    $db->delete('test', ["id" => 1]);
