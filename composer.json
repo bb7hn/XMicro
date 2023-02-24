@@ -20,7 +20,7 @@
   "name": "batuhanozen/x-micro",
   "require": {
     "ext-pdo": "*",
-    "php": "^8.0"
+    "php": "^7.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "v2.16.3"
