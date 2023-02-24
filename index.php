@@ -1,79 +1,82 @@
 <?php
-use XMicro\MicroService;
 
-require_once('XMicro.php');
+    use XMicro\MicroService;
+
+    require_once 'MicroService.php';
+
+    $Service = new MicroService(true);
+
+    //$Service->response();
+
+    $DB = $Service->conn_mysql('localhost', 'x-micro', 'root', '');
+
+    $DB->select('test', '*');
 
 
-$Service = new MicroService(true);
+    $cols = [
+        'id' => 'int(11) NOT NULL AUTO_INCREMENT',
+        'name' => 'varchar(255)',
+        'last_name' => 'varchar(255)'
+    ];
 
-//$Service->response();
+    //$DB->create('test', $cols);
 
-$DB = $Service->conn_mysql('localhost','x-micro','root','');
+    //$DB->drop('test');
 
-$cols = [
-    "id" => "int(11) NOT NULL AUTO_INCREMENT",
-    "name" =>  "varchar(255)",
-    "last_name" =>  "varchar(255)"
-];
+    //$DB->create('test', $cols);
 
-//$DB->create('test', $cols);
+    /*$values = [
+        "name" => "a",
+        "last_name" => "b"
+    ];
 
-//$DB->drop('test');
+    $DB->insert('test', $values);
 
-//$DB->create('test', $cols);
+    $values["name"]="c";
+    $values["last_name"]="d";
 
-$values = [
-    "name" => "a",
-    "last_name" => "b"
-];
+    $DB->insert('test', $values);
 
-$DB->insert('test', $values);
+    $conditions = [
+        "id"=>1,
+    ];*/
 
-$values["name"]="c";
-$values["last_name"]="d";
+    /*$DB->delete('test');*/
 
-$DB->insert('test', $values);
+    /*$where = [
+        "id" => 1,
+        "deleted_at" => !0
+    ];
 
-/*$conditions = [
-    "id"=>1,
-];*/
+    $results = $DB->find('test');
 
-/*$DB->delete('test');*/
+    echo'<pre>';
+    var_dump($results);
+    echo'</pre>';
 
-$where = [
-    "id" => 1,
-    "deleted_at" => !0
-];
+    $results = $DB->find('test','*',$where);
 
-$results = $DB->find('test');
+    echo'<pre>';
+    var_dump($results);
+    echo'</pre>';
 
-echo'<pre>';
-var_dump($results);
-echo'</pre>';
+    $results = $DB->first('test');
 
-$results = $DB->find('test','*',$where);
+    echo'<pre>';
+    var_dump($results);
+    echo'</pre>';
 
-echo'<pre>';
-var_dump($results);
-echo'</pre>';
+    $results = $DB->first('test',);
 
-$results = $DB->first('test');
+    echo'<pre>';
+    var_dump($results);
+    echo'</pre>';
 
-echo'<pre>';
-var_dump($results);
-echo'</pre>';
+    $results = $DB->last('test');
 
-$results = $DB->first('test',);
+    echo'<pre>';
+    var_dump($results);
+    echo'</pre>';*/
 
-echo'<pre>';
-var_dump($results);
-echo'</pre>';
-
-$results = $DB->last('test');
-
-echo'<pre>';
-var_dump($results);
-echo'</pre>';
-
-//$Service->response(['message'=>'ok','data'=>$results]);
-//$Service->response(['message'=>'ok','data'=>$results]);
+    //$Service->response(['message'=>'ok','data'=>$results]);
+    //$Service->response(['message'=>'ok','data'=>$results]);
