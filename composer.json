@@ -19,7 +19,8 @@
   "minimum-stability": "stable",
   "name": "batuhanozen/x-micro",
   "require": {
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "php": "^8.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "v2.16.3"
