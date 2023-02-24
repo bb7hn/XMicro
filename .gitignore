@@ -1,0 +1,5 @@
+.idea
+.idea/.gitignore
+vendor/
+.DS_Store
+.php-cs-fixer.cache
