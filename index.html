@@ -67,12 +67,19 @@
 <h2>Create</h2>
 <pre>
     <code class="language-php">
-    use XMicro\MicroService;
-    require_once 'vendor/autoload.php';
-    // INIT CLASS
-    // NOTE THAT: IF DEBUGGER ENABLED YOU'LL SEE ONLY QUERIES. NONE OF THEM WILL RUN
-    $service = new MicroService(true);
-    $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
+    // CREATE EXAMPLE
+    $structure = [
+        'id' => 'INT(11) AUTO_INCREMENT PRIMARY KEY',
+        'first_name' => 'VARCHAR(255)',
+        'last_name' => 'VARCHAR(255)',
+        'age' => 'INT(11) NOT NULL',
+        'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'updated_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+        'deleted_at' => 'TIMESTAMP NULL DEFAULT NULL',
+    ];
+    //$db->create('test', $structure,true); if you set third parameter true
+    //function will handle creating last 3 columns (created_at ,updated_at and deleted_at)
+    $db->create('test', $structure);
     </code>
 </pre>
 <h3>Debugger Result</h3>

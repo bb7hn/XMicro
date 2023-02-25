@@ -22,17 +22,20 @@
             }
         }
 
-        public function create($tableName, $columns): void
+        public function create($tableName, $columns, $insertCUD = false): void
         {
             // $columns is an associative array of column names and types
             // e.g. ['id' => 'INT(11) AUTO_INCREMENT PRIMARY KEY', 'name' => 'VARCHAR(255)']
 
-
+            $sqlSuffix = ($insertCUD ? "
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            deleted_at TIMESTAMP NULL DEFAULT NULL" : "");
             $sql = "CREATE TABLE IF NOT EXISTS $tableName (";
             foreach ($columns as $columnName => $columnType) {
                 $sql .= "$columnName $columnType, ";
             }
-            $sql = rtrim($sql, ", ") . ")";
+            $sql = rtrim($sql, ", ") . $sqlSuffix . ")";
             if ($this->debugger) {
                 echo '<h4>CREATE</h4>';
                 echo '<pre><code class="language-sql">' . $sql . '</code></pre>';
