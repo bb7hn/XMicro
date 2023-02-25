@@ -3,6 +3,7 @@
     namespace XMicro;
 
     use PDO;
+    use PDOException;
 
     class MySql
     {
@@ -27,7 +28,7 @@
             // $columns is an associative array of column names and types
             // e.g. ['id' => 'INT(11) AUTO_INCREMENT PRIMARY KEY', 'name' => 'VARCHAR(255)']
 
-            $sqlSuffix = ($insertCUD ? "
+            $sqlSuffix = ($insertCUD ? ",
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             deleted_at TIMESTAMP NULL DEFAULT NULL" : "");
