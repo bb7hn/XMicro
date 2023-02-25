@@ -34,8 +34,15 @@
                         padding: 24px;
                     }
                     
-                    
-                    
+                    .code{
+                        padding: 12px;
+                        border-radius: 12px;
+                        line-height: 28px;
+                        letter-spacing: .7px;
+                    }
+                    .code-inner{
+                    margin-left: 16px;
+                    }
                 </style>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
@@ -96,9 +103,14 @@
         {
             // if debugger enabled run sql syntax highlighterz"
             if ($this->debugger) {
-                echo '
-                <script>hljs.highlightAll();</script>
-            ';
+                echo "
+                <script>
+                    document.querySelectorAll('div.code').forEach(el => {
+                      // then highlight each
+                      hljs.highlightElement(el);
+                    });
+                </script>
+            ";
             }
         }
     }

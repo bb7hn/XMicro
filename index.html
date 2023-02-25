@@ -62,8 +62,8 @@
     $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
     </code>
 </pre>
-<hr/>
 
+<hr/>
 <h2>Create</h2>
 <pre>
     <code class="language-php">
@@ -85,25 +85,39 @@
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    CREATE TABLE IF NOT EXISTS test(
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    age INT(11) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL DEFAULT NULL)
+    CREATE TABLE IF NOT EXISTS test (
+        id INT(11) AUTO_INCREMENT PRIMARY KEY,
+        first_name VARCHAR(255),
+        last_name VARCHAR(255),
+        age INT(11) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP NULL DEFAULT NULL);
     </code>
 </pre>
-<hr/>
 
+<hr/>
 <h2>INSERT</h2>
 <pre>
     <code class="language-php">
     // INSERT EXAMPLE
-    $data = [
-        "first_name" => "John",
-        "last_name" => "Doe"
+    $data = [ // array of arrays
+        ["first_name" => "John",
+            "last_name" => "Doe",
+            "age" => 25
+        ],
+        ["first_name" => "Jane",
+            "last_name" => "Doe",
+            "age" => 24
+        ],
+        ["first_name" => "Jack",
+            "last_name" => "Boe",
+            "age" => 26
+        ],
+        ["first_name" => "June",
+            "last_name" => "Boe",
+            "age" => 25
+        ]
     ];
     $db->insert('test', $data);
     </code>
@@ -111,73 +125,82 @@
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    INSERT INTO test (first_name, last_name, created_at) VALUES (?,?,NOW())
-    </code>
-    <h4 style="margin-left: 12px;margin-top:0px;color: forestgreen;">values</h4>
-    <code style="margin-left: 12px;margin-top:0px;" class="language-js">
-    {"first_name":"John","last_name":"Doe"}
+    INSERT INTO test
+        (first_name, last_name, age, created_at)
+        VALUES
+        (?,?,?,NOW()),
+        (?,?,?,NOW()),
+        (?,?,?,NOW()),
+        (?,?,?,NOW());
     </code>
 </pre>
 
 <hr/>
-<h2>Select</h2>
+<h2>SELECT</h2>
 <pre>
     <code class="language-php">
-    // SELECT EXAMPLE
-    $db->select("test", 1);
+    // SELECT FIRST EXAMPLE 1
+    $db->select("test");
+
+    // SELECT FIRST EXAMPLE 2 (id equals)
+    $db->select("test", "id = ?", [1]);
+
+    // SELECT FIRST EXAMPLE 3 (id in)
+    $inArr = [2, 3, 4];
+    $db->select("test", "id NOT IN (?)", ['(' . implode(',', $inArr) . ')']);
+
+    // SELECT LAST EXAMPLE 4
+    $db->select("test", "1 ORDER BY id DESC");
+
+    // SELECT LAST EXAMPLE 5 (id equals)
+    $db->select("test", "id = ? ORDER BY id DESC", [1]);
+
+    // SELECT LAST EXAMPLE 6 (id in)
+    $inArr = [5, 6, 7];
+    $db->select("test", "id IN (?) ORDER BY id DESC", ['(' . implode(',', $inArr) . ')']);
     </code>
 </pre>
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    SELECT * FROM test WHERE id = ?
-    </code>
-    <h4 style="margin-left: 12px;margin-top:0px;color: forestgreen;">values</h4>
-    <code style="margin-left: 12px;margin-top:0px;" class="language-js">
-    [1]
+    1.) SELECT * FROM test
+
+    2.) SELECT * FROM test WHERE id = ?
+
+    3.) SELECT * FROM test WHERE id NOT IN (?)
+
+    4.) SELECT * FROM test WHERE 1 ORDER BY id DESC
+
+    5.) SELECT * FROM test WHERE id = ? ORDER BY id DESC
+
+    6.) SELECT * FROM test WHERE id IN (?) ORDER BY id DESC
     </code>
 </pre>
 
 <hr/>
-
-<h2>Select All</h2>
+<h2>SELECT ALL</h2>
 <pre>
     <code class="language-php">
-    // SELECT ALL EXAMPLE
+    // SELECT ALL EXAMPLE 1
     $db->selectAll("test");
+
+    // SELECT ALL EXAMPLE WITH CONDITIONS 2
+    $conditions = ['first_name = ?', 'age <= ?'];
+    $params = ['John', 30];
+    $db->selectAll("test", $conditions, $params);
     </code>
 </pre>
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    SELECT * FROM test
+    1.) SELECT * FROM test;
+
+    2.) SELECT * FROM test WHERE first_name = ? AND age <= ?;
     </code>
 </pre>
 
 <hr/>
-
-<h2>Select All (Conditional)</h2>
-<pre>
-    <code class="language-php">
-    // SELECT ALL EXAMPLE WITH CONDITIONS
-    $conditions = ['name' => 'John', 'age' => 30];
-    $db->selectAll("test", $conditions);
-    </code>
-</pre>
-<h3>Debugger Result</h3>
-<pre>
-    <code class="language-sql">
-    SELECT * FROM test WHERE name = ? AND age = ?
-    </code>
-    <h4 style="margin-left: 12px;color: forestgreen;">values</h4>
-    <code style="margin-left: 12px;" class="language-js">
-    {"name":"John","age":30}
-    </code>
-</pre>
-
-<hr/>
-
-<h2>Update</h2>
+<h2>UPDATE</h2>
 <pre>
     <code class="language-php">
     // UPDATE EXAMPLE
@@ -187,46 +210,50 @@
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    UPDATE test SET age=? WHERE id = ? AND updated_at = NOW()
-    </code>
-    <h4 style="margin-left: 12px;color: forestgreen;">values</h4>
-    <code style="margin-left: 12px;" class="language-js">
-    {"age":31}
+    UPDATE test SET age=? WHERE id = ? AND updated_at = NOW();
     </code>
 </pre>
 
-<h2>Delete</h2>
+<hr/>
+<h2>DELETE</h2>
 <pre>
     <code class="language-php">
-    // DELETE CONDITIONAL EXAMPLE
+    // DELETE CONDITIONAL  EXAMPLE 1
     $db->delete('test', ["id" => 1]);
-    </code>
-</pre>
-<h3>Debugger Result</h3>
-<pre>
-    <code class="language-sql">
-    UPDATE test SET deleted_at = NOW()
-    </code>
-</pre>
 
-<h2>Delete All</h2>
-<pre>
-    <code class="language-php">
-    // DELETE ALL EXAMPLE
-    //$db->delete('test', []); // the line below is same with this line
+    // DELETE ALL EXAMPLE 2
     $db->delete('test');
     </code>
 </pre>
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    UPDATE test SET deleted_at = NOW() WHERE id = ?
-    </code>
-    <h4 style="margin-left: 12px;color: forestgreen;">values</h4>
-    <code style="margin-left: 12px;" class="language-js">
-    {"id":1}
+    1.) UPDATE test SET deleted_at = NOW(); WHERE id = ?
+
+    2.) UPDATE test SET deleted_at = NOW();
     </code>
 </pre>
+
+<hr/>
+<h2>COUNT</h2>
+<pre>
+    <code class="language-php">
+    // COUNT CONDITIONAL EXAMPLE (AND) 1
+    $db->count('test', ['age > ?', 'salary < ?'], [18, 20000]);
+
+    // COUNT CONDITIONAL EXAMPLE (OR) 2
+    $db->count('test', 'age > ? OR salary < ?', [18, 20000]);
+    </code>
+</pre>
+<h3>Debugger Result</h3>
+<pre>
+    <code class="language-sql">
+    1.) SELECT COUNT(*) FROM test WHERE age > ? AND salary < ?;
+
+    2.) SELECT COUNT(*) FROM test WHERE age > ? OR salary < ?;
+    </code>
+</pre>
+
 <script>hljs.highlightAll();</script>
 </body>
 </html>

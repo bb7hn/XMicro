@@ -8,7 +8,7 @@
     $service = new MicroService(true);
     $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
 
-    // CREATE EXAMPLE
+    /*// CREATE EXAMPLE
     $structure = [
         'id' => 'INT(11) AUTO_INCREMENT PRIMARY KEY',
         'first_name' => 'VARCHAR(255)',
@@ -21,27 +21,67 @@
     $db->create('test', $structure);
 
     // INSERT EXAMPLE
-    $data = [
-        "first_name" => "John",
-        "last_name" => "Doe"
+    $data = [ // array of arrays
+        ["first_name" => "John",
+            "last_name" => "Doe",
+            "age" => 25
+        ],
+        ["first_name" => "Jane",
+            "last_name" => "Doe",
+            "age" => 24
+        ],
+        ["first_name" => "Jack",
+            "last_name" => "Boe",
+            "age" => 26
+        ],
+        ["first_name" => "June",
+            "last_name" => "Boe",
+            "age" => 25
+        ]
     ];
-    $db->insert('test', $data);
+    $db->insert('test', $data);*/
 
-    // SELECT EXAMPLE
-    $db->select("test", 1);
+    // SELECT FIRST EXAMPLE 1 (ALL)
+    /*$db->select("test");*/
+
+    // SELECT FIRST EXAMPLE 2 (With id)
+    /*$db->select("test", "id = ?", [1]);*/
+
+
+    // SELECT FIRST EXAMPLE 3 (with id in)
+    /*$inArr = [2, 3, 4];
+    $db->select("test", "id NOT IN (?)", ['(' . implode(',', $inArr) . ')']);*/
+
+    // SELECT LAST EXAMPLE 4 (ALL)
+    /*$db->select("test", "1 ORDER BY id DESC");*/
+
+    // SELECT LAST EXAMPLE 5 (With id)
+    /*$db->select("test", "id = ? ORDER BY id DESC", [1]);*/
+
+
+    // SELECT FIRST EXAMPLE 6 (with id in)
+    /*$inArr = [2, 3, 4];
+    $db->select("test", "id NOT IN (?) ORDER BY id DESC", ['(' . implode(',', $inArr) . ')']);*/
 
     // SELECT ALL EXAMPLE
-    $db->selectAll("test");
+    /*$db->selectAll("test");*/
 
     // SELECT ALL EXAMPLE WITH CONDITIONS
-    $conditions = ['name' => 'John', 'age' => 30];
-    $db->selectAll("test", $conditions);
+    /*$conditions = ['first_name = ?', 'age <= ?'];
+    $params = ['John', 30];
+    $db->selectAll("test", $conditions, $params);*/
 
     // UPDATE EXAMPLE
     $db->update('test', 1, ['age' => 31]);
 
-    // DELETE ALL EXAMPLE
-    $db->delete('test');
+    // COUNT CONDITIONAL EXAMPLE (AND)
+    $db->count('test', ['age > ?', 'salary < ?'], [18, 20000]);
+
+    // COUNT CONDITIONAL EXAMPLE (OR)
+    $db->count('test', 'age > ? OR salary < ?', [18, 20000]);
 
     // DELETE CONDITIONAL EXAMPLE
     $db->delete('test', ["id" => 1]);
+
+    // DELETE ALL EXAMPLE
+    $db->delete('test');
