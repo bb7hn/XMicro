@@ -59,8 +59,9 @@
             $handleUpdatedAt = in_array('updated_at', $columnNames); // bool | int
 
             if ($handleUpdatedAt) {
-                $data["updated_at"] = "NOW()";
+                $data["updated_at"] = date("Y-m-d H:i:s",);
             }
+
             $keys = array_keys($data);
             $values = array_values($data);
             $setClause = implode('=?,', $keys) . '=?';
@@ -68,13 +69,14 @@
             $sql .= ';';
 
             $values[] = $id;
+
             if ($this->debugger) {
                 echo '<h4>UPDATE</h4>';
                 echo '<div class="code language-sql">' . $sql . '</div>';
                 echo '<h4 style="margin-left: 12px; color: forestgreen">Values</h4>';
                 echo '<div class="code code-inner language-js">' . json_encode($data) . '</div>';
-                /*return 0;*/
             }
+
             $stmt = $this->db->prepare($sql);
             $stmt->execute($values);
             return $stmt->rowCount();
