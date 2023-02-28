@@ -73,7 +73,7 @@
                 echo '<div class="code language-sql">' . $sql . '</div>';
                 echo '<h4 style="margin-left: 12px; color: forestgreen">Values</h4>';
                 echo '<div class="code code-inner language-js">' . json_encode($data) . '</div>';
-                return 0;
+                /*return 0;*/
             }
             $stmt = $this->db->prepare($sql);
             $stmt->execute($values);
