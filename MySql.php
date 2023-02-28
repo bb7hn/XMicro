@@ -59,7 +59,7 @@
             $handleUpdatedAt = in_array('updated_at', $columnNames); // bool | int
 
             if ($handleUpdatedAt) {
-                $data["updated_at"] = date("Y-m-d H:i:s",);
+                $data["updated_at"] = date("Y-m-d H:i:s");
             }
 
             $keys = array_keys($data);
