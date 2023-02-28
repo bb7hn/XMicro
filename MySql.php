@@ -249,7 +249,7 @@
             return $response;
         }
 
-        public function count(string $table, string|null|array $where = null, array|null $params = null, $includeDeletedRows): int
+        public function count(string $table, string|null|array $where = null, array|null $params = null, bool $includeDeletedRows = false): int
         {
             $tableDescription = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table'");
             $tableDescription->execute();
