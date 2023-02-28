@@ -8,17 +8,15 @@
     $service = new MicroService(true);
     $db = $service->conn_mysql('localhost', 'x-micro', 'root', '');
 
-    /*// CREATE EXAMPLE
+    // CREATE EXAMPLE
     $structure = [
         'id' => 'INT(11) AUTO_INCREMENT PRIMARY KEY',
         'first_name' => 'VARCHAR(255)',
         'last_name' => 'VARCHAR(255)',
-        'age' => 'INT(11) NOT NULL',
-        'created_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-        'updated_at' => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
-        'deleted_at' => 'TIMESTAMP NULL DEFAULT NULL',
+        'age' => 'INT(11) NOT NULL'
     ];
-    $db->create('test', $structure);
+    $db->create('test', $structure, true);
+    /*
 
     // INSERT EXAMPLE
     $data = [ // array of arrays
@@ -72,16 +70,16 @@
     $db->selectAll("test", $conditions, $params);*/
 
     // UPDATE EXAMPLE
-    $db->update('test', 1, ['age' => 31]);
+    /*$db->update('test', 1, ['age' => 31]);*/
 
     // COUNT CONDITIONAL EXAMPLE (AND)
-    $db->count('test', ['age > ?', 'salary < ?'], [18, 20000]);
+    /*$db->count('test', ['age > ?', 'salary < ?'], [18, 20000]);*/
 
     // COUNT CONDITIONAL EXAMPLE (OR)
-    $db->count('test', 'age > ? OR salary < ?', [18, 20000]);
+    /*$db->count('test', 'age > ? OR salary < ?', [18, 20000]);*/
 
     // DELETE CONDITIONAL EXAMPLE
-    $db->delete('test', ["id" => 1]);
+    /*$db->delete('test', ["id" => 1]);*/
 
     // DELETE ALL EXAMPLE
-    $db->delete('test');
+    /*$db->delete('test');*/

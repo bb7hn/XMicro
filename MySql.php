@@ -33,11 +33,14 @@
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             deleted_at TIMESTAMP NULL DEFAULT NULL" : "");
             $sql = "CREATE TABLE IF NOT EXISTS $tableName (";
+
             foreach ($columns as $columnName => $columnType) {
                 $sql .= "$columnName $columnType, ";
             }
+
             $sql = rtrim($sql, ", ") . $sqlSuffix . ")";
             $sql .= ';';
+
             if ($this->debugger) {
                 echo '<h4>CREATE</h4>';
                 echo '<div class="code language-sql">' . $sql . '</div>';
@@ -55,10 +58,13 @@
 
             $handleUpdatedAt = in_array('updated_at', $columnNames); // bool | int
 
+            if ($handleUpdatedAt) {
+                $data["updated_at"] = "NOW()";
+            }
             $keys = array_keys($data);
             $values = array_values($data);
             $setClause = implode('=?,', $keys) . '=?';
-            $sql = "UPDATE $table SET $setClause WHERE id = ?" . ($handleUpdatedAt ? ' AND updated_at = NOW()' : '');
+            $sql = "UPDATE $table SET $setClause WHERE id = ?";
             $sql .= ';';
 
             $values[] = $id;
