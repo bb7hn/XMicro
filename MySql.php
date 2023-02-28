@@ -177,11 +177,15 @@
                 } else {
                     $sql .= " WHERE $where";
                 }
+                if ($handleDeletedAt) {
+                    $sql .= " AND deleted_at IS NULL";
+                }
+            } else {
+                if ($handleDeletedAt) {
+                    $sql .= " WHERE deleted_at IS NULL";
+                }
             }
 
-            if ($handleDeletedAt) {
-                $sql .= " AND deleted_at IS NULL";
-            }
 
             $sql .= ";";
 
@@ -217,11 +221,15 @@
                 } else {
                     $sql .= " WHERE $where";
                 }
+                if ($handleDeletedAt) {
+                    $sql .= " AND deleted_at IS NULL";
+                }
+            } else {
+                if ($handleDeletedAt) {
+                    $sql .= " WHERE deleted_at IS NULL";
+                }
             }
 
-            if ($handleDeletedAt) {
-                $sql .= " AND deleted_at IS NULL";
-            }
 
             $sql .= ';';
             $stmt = $this->db->prepare($sql);
