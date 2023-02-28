@@ -93,7 +93,7 @@
             $isConditional = count($conditions) > 0;
 
             $sql = $handleDeletedAt ? "UPDATE $table SET deleted_at = NOW()" : "DELETE FROM $table";
-            $sql .= ';';
+
             if ($isConditional) {
                 $sql .= " WHERE ";
                 $values = [];
@@ -103,6 +103,8 @@
                 }
                 $sql = rtrim($sql, "AND ");
             }
+
+            $sql .= ';';
 
             if ($this->debugger) {
                 echo '<h3>DELETE' . ($isConditional ? ' (CONDITIONAL)' : '') . '</h3>';
@@ -140,7 +142,8 @@
                 }
                 $sql .= ",($placeholders" . ($handleCreatedAt ? ',NOW())' : ')');
             }
-            $sql .= "";
+
+            $sql .= ";";
 
             $stmt = $this->db->prepare($sql);
             $stmt->execute($values ?? null);
@@ -160,6 +163,12 @@
 
         public function select(string $table, null|array|string $where = null, array|null $params = null)
         {
+            $tableDescription = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table'");
+            $tableDescription->execute();
+            $columnNames = $tableDescription->fetchAll(PDO::FETCH_COLUMN);
+
+            $handleDeletedAt = in_array('deleted_at', $columnNames); // bool | int
+
             $sql = "SELECT * FROM $table";
             if ($where !== null) {
                 if (gettype($where) === "array") {
@@ -169,6 +178,12 @@
                     $sql .= " WHERE $where";
                 }
             }
+
+            if ($handleDeletedAt) {
+                $sql .= " AND deleted_at IS NULL";
+            }
+
+            $sql .= ";";
 
             $stmt = $this->db->prepare($sql);
             $stmt->execute($params);
@@ -184,9 +199,16 @@
             return $response;
         }
 
-        public function selectAll($tableName, array|null|string $where = null, $params = null): array
+        public function selectAll($table, array|null|string $where = null, $params = null): array
         {
-            $sql = "SELECT * FROM $tableName";
+            //TODO CONVERT FOLLOWING HANDLER TO FUNCTION FOR DELETED_UPDATED AND CREATED_AT VALUES
+            $tableDescription = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table'");
+            $tableDescription->execute();
+            $columnNames = $tableDescription->fetchAll(PDO::FETCH_COLUMN);
+
+            $handleDeletedAt = in_array('deleted_at', $columnNames); // bool | int
+
+            $sql = "SELECT * FROM $table";
 
             if ($where !== null) {
                 if (gettype($where) === "array") {
@@ -195,6 +217,10 @@
                 } else {
                     $sql .= " WHERE $where";
                 }
+            }
+
+            if ($handleDeletedAt) {
+                $sql .= " AND deleted_at IS NULL";
             }
 
             $sql .= ';';
@@ -215,8 +241,14 @@
             return $response;
         }
 
-        public function count(string $table, string|null|array $where = null, array|null $params = null): int
+        public function count(string $table, string|null|array $where = null, array|null $params = null, $includeDeletedRows): int
         {
+            $tableDescription = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table'");
+            $tableDescription->execute();
+            $columnNames = $tableDescription->fetchAll(PDO::FETCH_COLUMN);
+
+            $handleDeletedAt = in_array('deleted_at', $columnNames); // bool | int
+
             $sql = "SELECT COUNT(*) FROM $table";
 
             if ($where !== null) {
@@ -227,7 +259,13 @@
                     $sql .= " WHERE $where";
                 }
             }
+
+            if ($handleDeletedAt && !$includeDeletedRows) {
+                $sql .= " AND deleted_at IS NULL";
+            }
+
             $sql .= ';';
+
             if ($this->debugger) {
                 echo '<h4>COUNT</h4>';
                 echo '<div class="code language-sql">' . $sql . '</div>';
