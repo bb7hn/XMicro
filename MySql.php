@@ -113,8 +113,8 @@
                     echo '<h4 style="margin-left: 12px; color: forestgreen">Values</h4>';
                     echo '<div style="margin-left: 12px" class="code language-js">' . json_encode($conditions) . '</div>';
                 }
-                return 0;
             }
+
             $stmt = $this->db->prepare($sql);
             $stmt->execute($values ?? []);
             return $stmt->rowCount();
