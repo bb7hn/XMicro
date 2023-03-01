@@ -166,7 +166,7 @@
             return $response;
         }
 
-        public function select(string $table, null|array|string $where = null, array|null $params = null)
+        public function select(string $table, null|array|string $where = null, array|null $params = null, false|int $index = false, false|int $limit = false)
         {
             $tableDescription = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table'");
             $tableDescription->execute();
@@ -190,13 +190,21 @@
                     $sql .= " WHERE deleted_at IS NULL";
                 }
             }
-
+            //handle limit and index
+            if ($limit !== false && $index !== false) {
+                $sql .= " LIMIT $index,$limit";
+            } elseif ($index !== false) {
+                $sql .= " LIMIT $index,10";
+            } elseif ($limit !== false) {
+                $sql .= " LIMIT 0,$limit";
+            }
 
             $sql .= ";";
 
             $stmt = $this->db->prepare($sql);
             $stmt->execute($params);
-            $response = $stmt->fetch(PDO::FETCH_ASSOC);
+            $response = ($limit !== false || $index !== false ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetch(PDO::FETCH_ASSOC));
+
             if ($this->debugger) {
                 echo '<h4>SELECT</h4>';
                 echo '<div class="code language-sql">' . $sql . '</div>';

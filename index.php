@@ -39,6 +39,9 @@
     ];
     $db->insert('test', $data);*/
 
+    // SELECT EXAMPLE (ALL)
+    //$db->select("test", index: 0, limit: 10);
+
     // SELECT FIRST EXAMPLE 1 (ALL)
     /*$db->select("test");*/
 

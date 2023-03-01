@@ -160,6 +160,10 @@
 <h2>SELECT</h2>
 <pre>
     <code class="language-php">
+    // SELECT EXAMPLE 0(Limit,Index)
+    //$db->select("test", null, null, 0, 10); => this is long
+    $db->select("test", index: 0, limit: 10); // => we are suggesting to prefer this one :)
+
     // SELECT FIRST EXAMPLE 1
     $db->select("test");
 
@@ -184,17 +188,19 @@
 <h3>Debugger Result</h3>
 <pre>
     <code class="language-sql">
-    1.) SELECT * FROM test
+    0.) SELECT * FROM test WHERE deleted_at IS NULL LIMIT 0,10;
 
-    2.) SELECT * FROM test WHERE id = ?
+    1.) SELECT * FROM test WHERE deleted_at IS NULL;
 
-    3.) SELECT * FROM test WHERE id NOT IN (?)
+    2.) SELECT * FROM test WHERE id = ? AND deleted_at IS NULL;
 
-    4.) SELECT * FROM test WHERE 1 ORDER BY id DESC
+    3.) SELECT * FROM test WHERE id NOT IN (?) AND deleted_at IS NULL;
 
-    5.) SELECT * FROM test WHERE id = ? ORDER BY id DESC
+    4.) SELECT * FROM test WHERE 1 AND deleted_at IS NULL ORDER BY id DESC;
 
-    6.) SELECT * FROM test WHERE id IN (?) ORDER BY id DESC
+    5.) SELECT * FROM test WHERE id = ? AND deleted_at IS NULL ORDER BY id DESC;
+
+    6.) SELECT * FROM test WHERE id IN (?) AND deleted_at IS NULL ORDER BY id DESC;
     </code>
 </pre>
 
