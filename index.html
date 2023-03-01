@@ -64,6 +64,27 @@
 </pre>
 
 <hr/>
+<h2>Response</h2>
+<pre>
+    <code class="language-php">
+    $response=[
+        "message" => "Here will be response message.",
+        "code" => 200
+    ];
+    $service->response($response,$response['code']);
+    </code>
+</pre>
+<h3>Response To Client</h3>
+<pre>
+    <code class="language-js">
+    {
+      "message": "Here will be response message.",
+      "code": 200
+    }
+    </code>
+</pre>
+
+<hr/>
 <h2>Create</h2>
 <pre>
     <code class="language-php">
