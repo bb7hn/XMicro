@@ -17,10 +17,15 @@
                 $this->db = new PDO($dsn, $username, $password);
                 $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->debugger = $debugger;
-            } catch (PDOException) {
-                response(['message' => 'Service Unavailable',], 503);
-                exit;
+            } catch (PDOException $e) {
+                //response(['message' => 'Service Unavailable',], 503);
+                //exit;
+                if ($debugger) {
+                    throw $e;
+                }
+                return false;
             }
+            return true;
         }
 
         public function create($tableName, $columns, $insertCUD = false): void
