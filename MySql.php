@@ -282,7 +282,7 @@
             }
 
             if ($handleDeletedAt && !$includeDeletedRows) {
-                $sql .= " AND deleted_at IS NULL";
+                $sql .= ($where !== null?" AND":" WHERE")." deleted_at IS NULL";
             }
 
             $sql .= ';';
