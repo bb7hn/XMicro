@@ -10,10 +10,10 @@
         private PDO $db;
         private bool $debugger;
 
-        public function __construct(string $host, string $dbname, string $username, string $password, bool $debugger = false)
+        public function __construct(string $host, string $dbname, string $username, string $password, bool $debugger = false,$charset="utf8mb4")
         {
             try {
-                $dsn = "mysql:host=$host;dbname=$dbname";
+                $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
                 $this->db = new PDO($dsn, $username, $password);
                 $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->debugger = $debugger;
