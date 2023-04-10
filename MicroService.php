@@ -18,8 +18,6 @@
         public function __construct(bool $debugger = false)
         {
             if (!$debugger) {
-                header('Content-type: application/json; charset=utf-8');
-            } else {
                 echo '
                     <style>
                     html{

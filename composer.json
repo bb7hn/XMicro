@@ -21,8 +21,5 @@
   "require": {
     "ext-pdo": "*",
     "php": "^8.0.0"
-  },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "v2.16.3"
   }
 }
