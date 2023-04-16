@@ -17,7 +17,7 @@
          */
         public function __construct(bool $debugger = false)
         {
-            if (!$debugger) {
+            if ($debugger) {
                 echo '
                     <style>
                     html{
